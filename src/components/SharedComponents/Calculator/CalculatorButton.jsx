@@ -1,8 +1,7 @@
 import React from "react";
-import { Input } from "../../ui/input";
 import { Button } from "@/components/ui/button";
 
-function NumericButton({ text, onPress }) {
+function CalculatorButton({ text, onPress }) {
   return (
     <Button
       onClick={() => {
@@ -16,4 +15,4 @@ function NumericButton({ text, onPress }) {
   );
 }
 
-export default NumericButton;
+export default CalculatorButton;

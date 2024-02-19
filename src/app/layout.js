@@ -6,7 +6,6 @@ import Header from "@/components/SharedComponents/Header";
 import { ThemeProvider } from "@/components/SharedComponents/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/SharedComponents/Footer";
-import { TabContextProvider } from "@/Contexts/Tabcontext";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,12 +33,10 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <TabContextProvider>
-            <Header />
-            {children}
-            <Toaster position="top-center" />
-            <Footer />
-          </TabContextProvider>
+          <Header />
+          {children}
+          <Toaster position="top-center" />
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
