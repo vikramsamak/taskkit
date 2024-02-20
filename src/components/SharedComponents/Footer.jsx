@@ -8,16 +8,10 @@ import {
   NavigationMenuList,
 } from "../ui/navigation-menu";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { useRouter } from "next/navigation";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import Link from "next/link";
 
 function Footer() {
-  const router = useRouter();
+ 
   return (
     <footer className="flex items-center w-full border-t border-input rounded-t-lg h-16">
       <div className="px-6 py-6 flex justify-center w-full">
@@ -25,22 +19,11 @@ function Footer() {
           <NavigationMenuList>
             <NavigationMenuItem>
               {ROUTES.map((route, index) => (
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  key={index}
-                  onClick={() => {
-                    router.push(route.href);
-                  }}
-                >
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>{route.icon}</TooltipTrigger>
-                      <TooltipContent>
-                        <p className="font-mono text-sm">{route.hoverText}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </NavigationMenuLink>
+                <Link href={route.href} legacyBehavior passHref key={index}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    {route.icon}
+                  </NavigationMenuLink>
+                </Link>
               ))}
             </NavigationMenuItem>
           </NavigationMenuList>
