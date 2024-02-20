@@ -1,4 +1,4 @@
-import CalculatorWindow from "@/components/SharedComponents/Calculator/CalculatorWindow";
+import CalculatorWindow from "@/components/Calculator/CalculatorWindow";
 import PageView from "@/components/SharedComponents/PageView";
 import React from "react";
 
