@@ -1,4 +1,4 @@
-import CalculatorButton from "@/components/SharedComponents/Calculator/CalculatorButton";
+import CalculatorButton from "@/components/Calculator/CalculatorButton";
 import { NUMBERS, OPERATORS } from "@/helpers/Constants";
 import { toast } from "sonner";
 
