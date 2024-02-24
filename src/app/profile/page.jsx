@@ -1,13 +1,8 @@
-"use client";
-
 import PageView from "@/components/SharedComponents/PageView";
-import UserProfileCard from "@/components/User/UserProfileCard";
-import { useAuthContext } from "@/Contexts/AuthContexts";
+import UserProfileWindow from "@/components/User/UserProfileWindow";
 
 function Profilepage() {
-  const { user } = useAuthContext();
-
-  return <PageView window={<UserProfileCard user={user} />}></PageView>;
+  return <PageView window={<UserProfileWindow />}></PageView>;
 }
 
 export default Profilepage;
