@@ -14,6 +14,8 @@ export const HOME = "HOME";
 
 export const PROFILE = "PROFILE";
 
+export const USERACESSTOKEN = "useracesstoken";
+
 export const ROUTES = [
   {
     icon: <AiFillCalculator size={25} />,

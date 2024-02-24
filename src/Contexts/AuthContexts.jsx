@@ -8,19 +8,24 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
+import Cookies from "js-cookie";
+import { USERACESSTOKEN } from "@/helpers/Constants";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const googleLogIn = async() => {
+  const googleLogIn = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const user = await signInWithPopup(auth, provider);
+    const userAcesstoken = user.user.accessToken;
+    Cookies.set(USERACESSTOKEN, userAcesstoken);
   };
 
-  const logOut = async() => {
-   await signOut(auth);
+  const logOut = async () => {
+    await signOut(auth);
+    Cookies.remove(USERACESSTOKEN);
   };
 
   useEffect(() => {
