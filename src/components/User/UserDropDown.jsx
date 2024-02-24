@@ -28,7 +28,7 @@ function UserDropDown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar user={user} />
+        <UserAvatar photoUrl={user?.photoURL} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem
