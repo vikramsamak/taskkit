@@ -20,7 +20,11 @@ export const AuthContextProvider = ({ children }) => {
     const provider = new GoogleAuthProvider();
     const user = await signInWithPopup(auth, provider);
     const userAcesstoken = user.user.accessToken;
-    Cookies.set(USERACESSTOKEN, userAcesstoken);
+    const currentDate = new Date();
+    const expiryDate = new Date(
+      currentDate.getTime() + 2 * 24 * 60 * 60 * 1000
+    );
+    Cookies.set(USERACESSTOKEN, userAcesstoken, { expires: expiryDate });
   };
 
   const logOut = async () => {
