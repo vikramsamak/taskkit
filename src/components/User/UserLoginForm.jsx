@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,8 +13,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { DEV_ENV_URL, ROUTES } from "@/helpers/Constants";
+import { useRouter } from "next/navigation";
+import Loader from "../SharedComponents/Loader";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import axios from "axios";
+import { useAuthContext } from "@/Contexts/AuthContexts";
 
 function UserLoginForm() {
+  const { setUser } = useAuthContext();
+  const router = useRouter();
+
   const formSchema = z.object({
     username: z.string().min(2, {
       message: "Username must be at least 2 characters.",
@@ -33,8 +42,38 @@ function UserLoginForm() {
     },
   });
 
+  const login = async (data) => {
+    var URL = undefined;
+    if (process.env.NODE_ENV == "development") {
+      URL = `${DEV_ENV_URL}${ROUTES.api.auth.signin}`;
+    }
+    try {
+      const res = await axios.post(URL, data);
+
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
+      }
+
+      return res.data;
+    } catch (error) {
+      toast.warning(error.message);
+    }
+  };
+
+  const { data, isPending, mutateAsync } = useMutation({
+    mutationFn: login,
+    onError: (error) => {
+      toast.warning(error);
+    },
+  });
+
   function onSubmit(values) {
-    console.log(values);
+    mutateAsync(values);
+  }
+
+  if (data) {
+    setUser(data);
+    router.push(ROUTES.page.protected.profile);
   }
 
   return (
@@ -76,7 +115,16 @@ function UserLoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Login</Button>
+            <Button
+              type="submit"
+              className="inline-flex justify-center items-center"
+            >
+              {isPending ? (
+                <Loader />
+              ) : (
+                <span className="font-mono tracking-wider">Login</span>
+              )}
+            </Button>
           </form>
         </Form>
       </div>

@@ -69,10 +69,10 @@ function UserSignUpForm() {
     }
   };
 
-  const { data, error, isPending, mutateAsync } = useMutation({
+  const { isPending, mutateAsync } = useMutation({
     mutationFn: signup,
     onSuccess: () => {
-      router.push("/");
+      router.push(ROUTES.page.index);
     },
     onError: (error) => {
       toast.warning(error);

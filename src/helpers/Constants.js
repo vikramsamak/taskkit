@@ -44,6 +44,7 @@ export const ROUTES = {
       notes: "/notes",
     },
     signup: "/signup",
+    index: "/",
   },
 };
 
