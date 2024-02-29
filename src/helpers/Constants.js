@@ -31,6 +31,7 @@ export const ROUTES = {
     auth: {
       signin: "/api/auth/signin",
       signup: "/api/auth/signup",
+      logout: "/api/auth/logout",
     },
     notes: "/api/notes",
     todos: "/api/todos",
@@ -45,3 +46,5 @@ export const ROUTES = {
     signup: "/signup",
   },
 };
+
+export const DEV_ENV_URL = "http://localhost:3000";

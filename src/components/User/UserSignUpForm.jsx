@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,13 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthContext } from "@/Contexts/AuthContexts";
 import axios from "axios";
-import { ROUTES } from "@/helpers/Constants";
+import { DEV_ENV_URL, ROUTES } from "@/helpers/Constants";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Loader from "../SharedComponents/Loader";
 
 function UserSignUpForm() {
-  const { setUser } = useAuthContext();
+  const router = useRouter();
 
   const formSchema = z
     .object({
@@ -54,18 +54,27 @@ function UserSignUpForm() {
   const signup = async (data) => {
     var URL = undefined;
     if (process.env.NODE_ENV == "development") {
-      URL = `http://localhost:3000${ROUTES.api.auth.signup}`;
+      URL = `${DEV_ENV_URL}${ROUTES.api.auth.signup}`;
     }
-    const res = await axios.post(URL, data);
-    return res.data;
+    try {
+      const res = await axios.post(URL, data);
+
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
+      }
+
+      return res.data;
+    } catch (error) {
+      toast.warning(error.message);
+    }
   };
 
   const { data, error, isPending, mutateAsync } = useMutation({
     mutationFn: signup,
     onSuccess: () => {
-      setUser(data);
+      router.push("/");
     },
-    onError: () => {
+    onError: (error) => {
       toast.warning(error);
     },
   });
@@ -143,7 +152,16 @@ function UserSignUpForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign Up</Button>
+            <Button
+              type="submit"
+              className="inline-flex justify-center items-center"
+            >
+              {isPending ? (
+                <Loader />
+              ) : (
+                <span className="font-mono tracking-wider">Sign Up</span>
+              )}
+            </Button>
           </form>
         </Form>
       </div>

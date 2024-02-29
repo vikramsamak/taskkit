@@ -7,26 +7,18 @@ import { getJWTToken } from "@/helpers/helperFunctions";
 
 export async function POST(req) {
   try {
-    const dbConnection = await dbConnect();
+    await dbConnect();
     const { fullName, username, password, confirm_password } = await req.json();
 
     if (password !== confirm_password) {
-      return NextResponse.json(
-        { error: "Password dont match" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Password dont match" });
     }
 
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({ username: username });
 
     if (user) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "User already exists" });
     }
-
-    // Password hashing
 
     const salt = await bcrypt.genSalt(10);
     const hashedPasswrod = await bcrypt.hash(password, salt);
@@ -42,14 +34,11 @@ export async function POST(req) {
 
       const token = getJWTToken(newUser._id);
 
-      const response = NextResponse.json(
-        {
-          _id: newUser._id,
-          fullName: newUser.fullName,
-          username: newUser.username,
-        },
-        { status: 201 }
-      );
+      const response = NextResponse.json({
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        username: newUser.username,
+      });
 
       response.cookies.set({
         name: TOKEN,
@@ -64,9 +53,6 @@ export async function POST(req) {
     }
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" });
   }
 }
