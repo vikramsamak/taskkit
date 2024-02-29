@@ -2,7 +2,7 @@ import React from "react";
 
 function AppHeader() {
   return (
-    <div className="flex flex-col py-2 px-2 gap-4 w-1/2">
+    <div className="flex flex-col py-2 px-2 gap-4 w-full">
       <div className="text-center px-2 py-2">
         <h1 className="text-4xl font-mono tracking-widest">TASKKIT</h1>
       </div>

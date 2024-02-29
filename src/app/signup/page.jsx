@@ -6,7 +6,7 @@ export default function SignupPage() {
   return (
     <PageView
       window={
-        <section className="flex flex-col w-full h-full items-center gap-4">
+        <section className="flex flex-col h-full justify-center gap-4">
           <AppHeader />
           <UserSignUpForm />
         </section>

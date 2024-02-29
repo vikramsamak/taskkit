@@ -14,20 +14,32 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { useAuthContext } from "@/Contexts/AuthContexts";
+import axios from "axios";
+import { ROUTES } from "@/helpers/Constants";
+import { toast } from "sonner";
 
 function UserSignUpForm() {
-  const formSchema = z.object({
-    fullName: z.string().min(1, { message: "Full name is required." }),
-    username: z
-      .string()
-      .min(6, { message: "Username must be at least 6 characters." }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be 8 character long" }),
-    confirm_password: z
-      .string()
-      .min(8, { message: "Password must be 8 character long" }),
-  });
+  const { setUser } = useAuthContext();
+
+  const formSchema = z
+    .object({
+      fullName: z.string().min(1, { message: "Full name is required." }),
+      username: z
+        .string()
+        .min(6, { message: "Username must be at least 6 characters." }),
+      password: z
+        .string()
+        .min(8, { message: "Password must be 8 characters long." }),
+      confirm_password: z
+        .string()
+        .min(8, { message: "Password must be 8 characters long." }),
+    })
+    .refine((data) => data.password === data.confirm_password, {
+      message: "Passwords do not match.",
+      path: ["confirm_password"],
+    });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -39,8 +51,27 @@ function UserSignUpForm() {
     },
   });
 
+  const signup = async (data) => {
+    var URL = undefined;
+    if (process.env.NODE_ENV == "development") {
+      URL = `http://localhost:3000${ROUTES.api.auth.signup}`;
+    }
+    const res = await axios.post(URL, data);
+    return res.data;
+  };
+
+  const { data, error, isPending, mutateAsync } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      setUser(data);
+    },
+    onError: () => {
+      toast.warning(error);
+    },
+  });
+
   function onSubmit(values) {
-    console.log(values);
+    mutateAsync(values);
   }
 
   return (
@@ -58,7 +89,7 @@ function UserSignUpForm() {
           >
             <FormField
               control={form.control}
-              name="username"
+              name="fullName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
