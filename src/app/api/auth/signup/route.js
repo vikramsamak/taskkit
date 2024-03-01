@@ -1,9 +1,9 @@
 import { dbConnect } from "@/db/connect";
-import UserModel from "@/models/userModel";
+import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { TOKEN } from "@/helpers/Constants";
-import { getJWTToken } from "@/helpers/helperFunctions";
+import { getAvatar, getJWTToken } from "@/helpers/helperFunctions";
 
 export async function POST(req) {
   try {
@@ -14,7 +14,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Password dont match" });
     }
 
-    const user = await UserModel.findOne({ username: username });
+    const user = await User.findOne({ username: username });
 
     if (user) {
       return NextResponse.json({ error: "User already exists" });
@@ -23,10 +23,13 @@ export async function POST(req) {
     const salt = await bcrypt.genSalt(10);
     const hashedPasswrod = await bcrypt.hash(password, salt);
 
-    const newUser = new UserModel({
+    const avatarUrl = await getAvatar(username);
+
+    const newUser = new User({
       fullName,
       username,
       password: hashedPasswrod,
+      avatarUrl,
     });
 
     if (newUser) {
@@ -38,6 +41,7 @@ export async function POST(req) {
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
+        avatarUrl: newUser.avatarUrl,
       });
 
       response.cookies.set({

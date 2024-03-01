@@ -72,6 +72,7 @@ function UserLoginForm() {
   }
 
   if (data) {
+    localStorage.setItem("CURRENTUSER", JSON.stringify(data));
     setUser(data);
     router.push(ROUTES.page.protected.profile);
   }

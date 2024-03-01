@@ -1,3 +1,5 @@
+import { createAvatar } from "@dicebear/core";
+import { lorelei } from "@dicebear/collection";
 import jwt from "jsonwebtoken";
 
 export const getJWTToken = (userid) => {
@@ -6,4 +8,13 @@ export const getJWTToken = (userid) => {
   });
 
   return token;
+};
+
+export const getAvatar = async(username) => {
+  const avatar = createAvatar(lorelei, {
+    seed: username,
+  });
+
+  const svg = await avatar.toDataUri();
+  return svg;
 };

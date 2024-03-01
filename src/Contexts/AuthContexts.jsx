@@ -1,11 +1,12 @@
-"use client";
+"use client"
 
 import { useContext, createContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const currentUser = JSON.parse(localStorage.getItem("CURRENTUSER"));
+  const [user, setUser] = useState(currentUser || null);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
