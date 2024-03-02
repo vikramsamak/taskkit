@@ -4,6 +4,7 @@ import { cn } from "../lib/utils";
 import { ThemeProvider } from "@/components/SharedComponents/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthContextProvider } from "@/Contexts/AuthContexts";
+import ReactQueryProvider from "@/components/SharedComponents/ReactQueryProvider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={cn(
-          "h-screen bg-background font-sans antialiased flex flex-col",
+          "h-screen bg-background font-sans antialiased flex flex-col w-screen",
           fontSans.variable
         )}
       >
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <AuthContextProvider>{children}</AuthContextProvider>
+          <ReactQueryProvider>
+            <AuthContextProvider>{children}</AuthContextProvider>
+          </ReactQueryProvider>
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>

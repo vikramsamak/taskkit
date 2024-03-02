@@ -14,9 +14,9 @@ export const HOME = "HOME";
 
 export const PROFILE = "PROFILE";
 
-export const USERACESSTOKEN = "useracesstoken";
+export const TOKEN = "token";
 
-export const ROUTES = [
+export const ICONS = [
   {
     icon: <AiFillCalculator size={25} />,
     hoverText: CALCULATOR,
@@ -25,3 +25,27 @@ export const ROUTES = [
   { icon: <FaUser size={25} />, hoverText: PROFILE, href: "/profile" },
   { icon: <RiTodoFill size={25} />, hoverText: TODOS, href: "/todos" },
 ];
+
+export const ROUTES = {
+  api: {
+    auth: {
+      signin: "/api/auth/signin",
+      signup: "/api/auth/signup",
+      logout: "/api/auth/logout",
+    },
+    notes: "/api/notes",
+    todos: "/api/todos",
+  },
+  page: {
+    protected: {
+      calculator: "/calculator",
+      profile: "/profile",
+      todos: "/todos",
+      notes: "/notes",
+    },
+    signup: "/signup",
+    index: "/",
+  },
+};
+
+export const DEV_ENV_URL = "http://localhost:3000";

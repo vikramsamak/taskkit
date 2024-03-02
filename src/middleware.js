@@ -1,13 +1,34 @@
 import { NextResponse } from "next/server";
-import { USERACESSTOKEN } from "./helpers/Constants";
+import { ROUTES, TOKEN } from "./helpers/Constants";
 
-export function middleware(request) {
-  const useracesstoken = request.cookies.get(USERACESSTOKEN);
-  if (!useracesstoken || !useracesstoken.value) {
-    return NextResponse.redirect(new URL("/", request.url));
+const apiRoutes = [ROUTES.api.notes, ROUTES.api.todos];
+
+export async function middleware(request) {
+  try {
+    const token = request.cookies.get(TOKEN)?.value;
+
+    if (!token) {
+      if (apiRoutes.some((route) => route === request.nextUrl.pathname)) {
+        return NextResponse.json({ error: "No token provided" });
+      } else {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ error: "Internal server error" });
   }
 }
 
 export const config = {
-  matcher: ["/calculator", "/todos", "/profile"],
+  matcher: [
+    "/api/todos",
+    "/api/notes",
+    "/calculator",
+    "/profile",
+    "/todos",
+    "/notes",
+  ],
 };

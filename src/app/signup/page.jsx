@@ -1,14 +1,14 @@
 import AppHeader from "@/components/SharedComponents/AppHeader";
-import Hero from "@/components/SharedComponents/Hero";
 import PageView from "@/components/SharedComponents/PageView";
+import UserSignUpForm from "@/components/User/UserSignUpForm";
 
-export default function Home() {
+export default function SignupPage() {
   return (
     <PageView
       window={
-        <section className="flex flex-col w-full h-full items-center gap-4">
+        <section className="flex flex-col h-full justify-center gap-4">
           <AppHeader />
-          <Hero />
+          <UserSignUpForm />
         </section>
       }
     ></PageView>
