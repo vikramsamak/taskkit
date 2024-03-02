@@ -1,5 +1,5 @@
 import { dbConnect } from "@/db/connect";
-import User from "@/models/userModel";
+import Users from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { getJWTToken } from "@/helpers/helperFunctions";
@@ -10,7 +10,7 @@ export async function POST(req) {
     await dbConnect();
     const { username, password } = await req.json();
 
-    const user = await User.findOne({ username: username });
+    const user = await Users.findOne({ username: username });
 
     const isPasswordCorrect = await bcrypt.compare(password, user?.password);
 

@@ -1,5 +1,5 @@
 import { dbConnect } from "@/db/connect";
-import User from "@/models/userModel";
+import Users from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { TOKEN } from "@/helpers/Constants";
@@ -14,7 +14,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Password dont match" });
     }
 
-    const user = await User.findOne({ username: username });
+    const user = await Users.findOne({ username: username });
 
     if (user) {
       return NextResponse.json({ error: "User already exists" });
@@ -25,7 +25,7 @@ export async function POST(req) {
 
     const avatarUrl = await getAvatar(username);
 
-    const newUser = new User({
+    const newUser = new Users({
       fullName,
       username,
       password: hashedPasswrod,
@@ -35,20 +35,11 @@ export async function POST(req) {
     if (newUser) {
       await newUser.save();
 
-      const token = getJWTToken(newUser._id);
-
       const response = NextResponse.json({
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
         avatarUrl: newUser.avatarUrl,
-      });
-
-      response.cookies.set({
-        name: TOKEN,
-        value: token,
-        httpOnly: true,
-        maxAge: 60 * 60 * 24,
       });
 
       return response;

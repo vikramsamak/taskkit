@@ -24,7 +24,7 @@ function UserAvatar({ size, photoUrl }) {
     >
       <AvatarImage src={photoUrl} />
       <AvatarFallback>
-        <sapn className="font-mono -tracking-wider">{fallBackText}</sapn>{" "}
+        <span className="font-mono -tracking-wider">{fallBackText}</span>
       </AvatarFallback>
     </Avatar>
   );

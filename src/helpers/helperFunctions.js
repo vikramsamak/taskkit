@@ -10,7 +10,7 @@ export const getJWTToken = (userid) => {
   return token;
 };
 
-export const getAvatar = async(username) => {
+export const getAvatar = async (username) => {
   const avatar = createAvatar(lorelei, {
     seed: username,
   });
