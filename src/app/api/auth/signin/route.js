@@ -12,13 +12,17 @@ export async function POST(req) {
 
     const user = await Users.findOne({ username: username });
 
+    if (!user) {
+      return NextResponse.json({ error: "User Not Found" });
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user?.password);
 
-    if (!user || !isPasswordCorrect) {
+    if (!isPasswordCorrect) {
       return NextResponse.json({ error: "Invalid Credientials" });
     }
 
-    const token = getJWTToken(user._id);
+    const token = await getJWTToken(user._id);
 
     const response = NextResponse.json({
       _id: user._id,
@@ -36,7 +40,7 @@ export async function POST(req) {
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.log("error while signin", error);
     return NextResponse.json({ error: "Internal server error" });
   }
 }

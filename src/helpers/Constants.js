@@ -35,6 +35,9 @@ export const ROUTES = {
     },
     notes: "/api/notes",
     todos: "/api/todos",
+    user: {
+      getUser: "/api/users/getUser/",
+    },
   },
   page: {
     protected: {
@@ -49,3 +52,7 @@ export const ROUTES = {
 };
 
 export const DEV_ENV_URL = "http://localhost:3000";
+
+export const DEV_ENV = "development";
+
+export const PROD_ENV = "production";
