@@ -13,13 +13,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { DEV_ENV_URL, ROUTES } from "@/helpers/Constants";
+import { ROUTES } from "@/helpers/Constants";
 import { useRouter } from "next/navigation";
 import Loader from "../SharedComponents/Loader";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuthContext } from "@/Contexts/AuthContexts";
+import { getBaseURl } from "@/helpers/helperFunctions";
 
 function UserLoginForm() {
   const { setUser } = useAuthContext();
@@ -43,10 +44,9 @@ function UserLoginForm() {
   });
 
   const login = async (data) => {
-    var URL = undefined;
-    if (process.env.NODE_ENV == "development") {
-      URL = `${DEV_ENV_URL}${ROUTES.api.auth.signin}`;
-    }
+    const baseUrl = getBaseURl();
+    const URL = `${baseUrl}${ROUTES.api.auth.signin}`;
+
     try {
       const res = await axios.post(URL, data);
 

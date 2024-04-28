@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { DEV_ENV_URL, ROUTES } from "@/helpers/Constants";
+import { ROUTES } from "@/helpers/Constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Loader from "../SharedComponents/Loader";
+import { getBaseURl } from "@/helpers/helperFunctions";
 
 function UserSignUpForm() {
   const router = useRouter();
@@ -52,10 +53,9 @@ function UserSignUpForm() {
   });
 
   const signup = async (data) => {
-    var URL = undefined;
-    if (process.env.NODE_ENV == "development") {
-      URL = `${DEV_ENV_URL}${ROUTES.api.auth.signup}`;
-    }
+    const baseUrl = getBaseURl();
+    const URL = `${baseUrl}${ROUTES.api.auth.signup}`;
+
     try {
       const res = await axios.post(URL, data);
 
