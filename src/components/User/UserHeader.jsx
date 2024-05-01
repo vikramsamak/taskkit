@@ -1,5 +1,5 @@
 import React from "react";
-import WindowHeader from "../SharedComponents/WindowHeader";
+import WindowHeader from "../SharedComponents/AppWindowHeader";
 import { PROFILE } from "@/helpers/Constants";
 
 function UserHeader() {

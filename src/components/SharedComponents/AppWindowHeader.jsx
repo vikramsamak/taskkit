@@ -1,4 +1,4 @@
-function WindowHeader({ windowName }) {
+function AppWindowHeader({ windowName }) {
   return (
     <div className="flex w-full justify-center border-b border-input h-16 px-2 py-2">
       <div className="flex items-center">
@@ -8,4 +8,4 @@ function WindowHeader({ windowName }) {
   );
 }
 
-export default WindowHeader;
+export default AppWindowHeader;

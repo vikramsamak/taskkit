@@ -1,4 +1,4 @@
-import WindowHeader from "../SharedComponents/WindowHeader";
+import WindowHeader from "../SharedComponents/AppWindowHeader";
 import { CALCULATOR } from "@/helpers/Constants";
 
 function CalculatorHeader() {
