@@ -23,11 +23,15 @@ export const ICONS = [
   {
     icon: <AiFillCalculator size={25} />,
     hoverText: CALCULATOR,
-    href: "/calculator",
+    href: "/apps/calculator",
   },
-  { icon: <FaUser size={25} />, hoverText: PROFILE, href: "/profile" },
-  { icon: <RiTodoFill size={25} />, hoverText: TODOS, href: "/todos" },
-  { icon: <FaStopwatch size={25} />, hoverText: STOPWATCH, href: "/stopwatch" },
+  { icon: <FaUser size={25} />, hoverText: PROFILE, href: "/apps/profile" },
+  { icon: <RiTodoFill size={25} />, hoverText: TODOS, href: "/apps/todos" },
+  {
+    icon: <FaStopwatch size={25} />,
+    hoverText: STOPWATCH,
+    href: "/apps/stopwatch",
+  },
 ];
 
 export const ROUTES = {
@@ -45,11 +49,11 @@ export const ROUTES = {
   },
   page: {
     protected: {
-      calculator: "/calculator",
-      profile: "/profile",
-      todos: "/todos",
-      notes: "/notes",
-      stopwatch: "/stopwatch",
+      calculator: "/apps/calculator",
+      profile: "/apps/profile",
+      todos: "/apps/todos",
+      notes: "/apps/notes",
+      stopwatch: "/apps/stopwatch",
     },
     signup: "/signup",
     index: "/",
