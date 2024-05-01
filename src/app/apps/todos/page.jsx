@@ -1,8 +1,8 @@
 import PageView from "@/components/SharedComponents/PageView";
-import TodoWindow from "@/components/Todos/TodoWindow";
+import TodosWindow from "@/components/Todos/TodosWindow";
 
 function Todospage() {
-  return <PageView window={<TodoWindow />}></PageView>;
+  return <PageView window={<TodosWindow />}></PageView>;
 }
 
 export default Todospage;
