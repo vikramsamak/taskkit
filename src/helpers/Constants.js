@@ -2,6 +2,7 @@ import { AiFillCalculator } from "react-icons/ai";
 import { RiTodoFill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { FaStopwatch } from "react-icons/fa";
+import { FaNoteSticky } from "react-icons/fa6";
 
 export const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
 
@@ -17,6 +18,8 @@ export const PROFILE = "PROFILE";
 
 export const STOPWATCH = "STOPWATCH";
 
+export const NOTES = "NOTES";
+
 export const TOKEN = "token";
 
 export const ICONS = [
@@ -25,12 +28,25 @@ export const ICONS = [
     hoverText: CALCULATOR,
     href: "/apps/calculator",
   },
-  { icon: <FaUser size={25} />, hoverText: PROFILE, href: "/apps/profile" },
-  { icon: <RiTodoFill size={25} />, hoverText: TODOS, href: "/apps/todos" },
+  {
+    icon: <RiTodoFill size={25} />,
+    hoverText: TODOS,
+    href: "/apps/todos",
+  },
+  {
+    icon: <FaUser size={25} />,
+    hoverText: PROFILE,
+    href: "/apps/profile",
+  },
   {
     icon: <FaStopwatch size={25} />,
     hoverText: STOPWATCH,
     href: "/apps/stopwatch",
+  },
+  {
+    icon: <FaNoteSticky size={25} />,
+    hoverText: NOTES,
+    href: "/apps/notes",
   },
 ];
 
@@ -54,6 +70,7 @@ export const ROUTES = {
       todos: "/apps/todos",
       notes: "/apps/notes",
       stopwatch: "/apps/stopwatch",
+      notes: "/apps/notes",
     },
     signup: "/signup",
     index: "/",
