@@ -10,6 +10,12 @@ import NotesForm from "./NotesForm";
 
 function NotesWindow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editNote, setEditNote] = useState(null);
+
+  const openEditDialog = (note) => {
+    setEditNote(note);
+    setIsModalOpen(true);
+  };
 
   return (
     <AppWindow>
@@ -19,11 +25,13 @@ function NotesWindow() {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           buttonText={"Add New Note"}
-          dialogContent={<NotesForm setIsModalOpen={setIsModalOpen} />}
-          dialogTitle={"Create New Note"}
+          dialogContent={
+            <NotesForm setIsModalOpen={setIsModalOpen} editNote={editNote} />
+          }
+          dialogTitle={editNote ? "Update Note" : "Create New Note"}
         />
       </AppMainSection>
-      <NotesView setIsModalOpen={setIsModalOpen} />
+      <NotesView openEditDialog={openEditDialog} />
     </AppWindow>
   );
 }

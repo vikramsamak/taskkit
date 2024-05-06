@@ -23,7 +23,9 @@ function AppDailog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogTitle className="font-mono uppercase">
+            {dialogTitle}
+          </DialogTitle>
           {dialogDesc && <DialogDescription>{dialogDesc}</DialogDescription>}
         </DialogHeader>
         {dialogContent}

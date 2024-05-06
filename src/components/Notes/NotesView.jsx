@@ -7,7 +7,7 @@ import { NOTES, ROUTES } from "@/helpers/Constants";
 import axios from "axios";
 import Loader from "../SharedComponents/Loader";
 
-function NotesView({ setIsModalOpen }) {
+function NotesView({ openEditDialog }) {
   const authUSer = useAuthContext();
   const notesQuery = [authUSer._id, NOTES];
 
@@ -46,7 +46,7 @@ function NotesView({ setIsModalOpen }) {
       )}
       {data &&
         data.map((note, i) => (
-          <NotesCard key={i} note={note} setIsModalOpen={setIsModalOpen} />
+          <NotesCard key={i} note={note} openEditDialog={openEditDialog} />
         ))}
     </ScrollArea>
   );

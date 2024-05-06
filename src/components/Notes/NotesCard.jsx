@@ -17,7 +17,7 @@ import { getBaseURl } from "@/helpers/helperFunctions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-function NotesCard({ note, setIsModalOpen }) {
+function NotesCard({ note, openEditDialog }) {
   const authUSer = useAuthContext();
   const notesQuery = [authUSer._id, NOTES];
   const queryClient = useQueryClient();
@@ -65,7 +65,7 @@ function NotesCard({ note, setIsModalOpen }) {
         <Button
           variant="secondary"
           onClick={() => {
-            setIsModalOpen(true);
+            openEditDialog(note);
           }}
         >
           <MdEdit />

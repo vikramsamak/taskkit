@@ -21,7 +21,7 @@ import { useAuthContext } from "@/Contexts/AuthContexts";
 import Loader from "../SharedComponents/Loader";
 import { toast } from "sonner";
 
-function NotesForm({ setIsModalOpen }) {
+function NotesForm({ setIsModalOpen, editNote }) {
   const queryClient = useQueryClient();
   const authUSer = useAuthContext();
 
@@ -37,8 +37,8 @@ function NotesForm({ setIsModalOpen }) {
   const form = useForm({
     resolver: zodResolver(notesForm),
     defaultValues: {
-      title: "",
-      description: "",
+      title: editNote ? editNote.title : "",
+      description: editNote ? editNote.description : "",
     },
   });
 
@@ -60,7 +60,13 @@ function NotesForm({ setIsModalOpen }) {
 
   const notesQuery = [authUSer._id, NOTES];
 
-  const { data, isError, error, isPending, mutate } = useMutation({
+  const {
+    data: createData,
+    isError: iscreateError,
+    error: createError,
+    isPending: iscreatePending,
+    mutate: createMutate,
+  } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       setIsModalOpen(false);
@@ -68,16 +74,62 @@ function NotesForm({ setIsModalOpen }) {
     },
   });
 
+  const upadteNote = async (noteData) => {
+    const baseUrl = getBaseURl();
+    const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
+    try {
+      const res = await axios.put(URL, noteData);
+      if (res.data.message) {
+        return res.data.message;
+      }
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const {
+    data: upadteData,
+    isError: isupdateError,
+    error: updateError,
+    isPending: isupdatePending,
+    mutate: updateMutate,
+  } = useMutation({
+    mutationFn: upadteNote,
+    onSuccess: () => {
+      setIsModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+  });
+
   function onSubmit(values) {
-    mutate(values);
+    if (editNote) {
+      updateMutate({
+        ...editNote,
+        title: values.title,
+        description: values.description,
+      });
+    } else {
+      createMutate(values);
+    }
   }
 
-  if (data) {
-    toast.success(data);
+  if (createData || upadteData) {
+    if (editNote) {
+      toast.success(upadteData);
+    } else {
+      toast.success(createData);
+    }
   }
 
-  if (isError) {
-    toast.error(error);
+  if (iscreateError || isupdateError) {
+    if (editNote) {
+      toast.error(updateError);
+    } else {
+      toast.error(createError);
+    }
   }
 
   return (
@@ -112,7 +164,15 @@ function NotesForm({ setIsModalOpen }) {
             </FormItem>
           )}
         />
-        <Button type="submit">{isPending ? <Loader /> : "Submit"}</Button>
+        <Button type="submit">
+          {iscreatePending || isupdatePending ? (
+            <Loader />
+          ) : editNote ? (
+            "Update"
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </Form>
   );
