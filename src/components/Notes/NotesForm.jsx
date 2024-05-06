@@ -18,10 +18,12 @@ import { getBaseURl } from "@/helpers/helperFunctions";
 import { NOTES, ROUTES } from "@/helpers/Constants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "@/Contexts/AuthContexts";
+import Loader from "../SharedComponents/Loader";
 
-function NotesForm() {
+function NotesForm({ setIsModalOpen }) {
   const queryClient = useQueryClient();
   const authUSer = useAuthContext();
+
   const notesForm = z.object({
     title: z
       .string()
@@ -57,16 +59,13 @@ function NotesForm() {
 
   const notesQuery = [authUSer._id, NOTES];
 
-  const { data, isPending, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
+      setIsModalOpen(false);
       queryClient.invalidateQueries({ queryKey: notesQuery });
     },
   });
-
-  if (data) {
-    console.log(data);
-  }
 
   function onSubmit(values) {
     mutate(values);
@@ -98,13 +97,13 @@ function NotesForm() {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Title for note" {...field} />
+                <Textarea placeholder="Description for note" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{isPending ? <Loader /> : "Submit"}</Button>
       </form>
     </Form>
   );

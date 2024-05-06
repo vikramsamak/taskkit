@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import AppWindow from "../SharedComponents/AppWindow";
 import AppWindowHeader from "../SharedComponents/AppWindowHeader";
 import { NOTES } from "@/helpers/Constants";
@@ -8,17 +9,21 @@ import NotesView from "./NotesView";
 import NotesForm from "./NotesForm";
 
 function NotesWindow() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <AppWindow>
       <AppWindowHeader windowName={NOTES}></AppWindowHeader>
       <AppMainSection>
         <AppDailog
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
           buttonText={"Add New Note"}
-          dialogContent={<NotesForm />}
+          dialogContent={<NotesForm setIsModalOpen={setIsModalOpen} />}
           dialogTitle={"Create New Note"}
         />
       </AppMainSection>
-      <NotesView />
+      <NotesView setIsModalOpen={setIsModalOpen} />
     </AppWindow>
   );
 }

@@ -8,9 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 
-function AppDailog({ buttonText, dialogTitle, dialogDesc, dialogContent }) {
+function AppDailog({
+  buttonText,
+  dialogTitle,
+  dialogDesc,
+  dialogContent,
+  isModalOpen,
+  setIsModalOpen,
+}) {
   return (
-    <Dialog>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">{buttonText}</Button>
       </DialogTrigger>
