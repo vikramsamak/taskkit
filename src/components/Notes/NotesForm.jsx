@@ -19,6 +19,7 @@ import { NOTES, ROUTES } from "@/helpers/Constants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "@/Contexts/AuthContexts";
 import Loader from "../SharedComponents/Loader";
+import { toast } from "sonner";
 
 function NotesForm({ setIsModalOpen }) {
   const queryClient = useQueryClient();
@@ -46,11 +47,11 @@ function NotesForm({ setIsModalOpen }) {
     const URL = `${baseUrl}${ROUTES.api.notes.createNote}`;
     try {
       const res = await axios.post(URL, notesData);
-      if (res.data) {
-        return res.data;
+      if (res.data.message) {
+        return res.data.message;
       }
-      if (res.error) {
-        return Promise.reject(res.error);
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
       }
     } catch (error) {
       console.log(error);
@@ -59,7 +60,7 @@ function NotesForm({ setIsModalOpen }) {
 
   const notesQuery = [authUSer._id, NOTES];
 
-  const { isPending, mutate } = useMutation({
+  const { data, isError, error, isPending, mutate } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       setIsModalOpen(false);
@@ -69,6 +70,14 @@ function NotesForm({ setIsModalOpen }) {
 
   function onSubmit(values) {
     mutate(values);
+  }
+
+  if (data) {
+    toast.success(data);
+  }
+
+  if (isError) {
+    toast.error(error);
   }
 
   return (

@@ -26,8 +26,8 @@ function NotesCard({ note, setIsModalOpen }) {
     const baseUrl = getBaseURl();
     const URL = `${baseUrl}${ROUTES.api.notes.deleteNote}?noteId=${noteId}`;
     try {
-      const res = axios.delete(URL);
-      if (res.data) {
+      const res = await axios.delete(URL);
+      if (res.data.message) {
         return res.data.message;
       }
       if (res.data.error) {
@@ -38,16 +38,20 @@ function NotesCard({ note, setIsModalOpen }) {
     }
   };
 
-  const { data, mutate, error } = useMutation({
+  const { data, mutate, error, isError } = useMutation({
     mutationFn: deleteNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notesQuery });
-      toast.success(data);
-    },
-    onError: () => {
-      toast.error(error);
     },
   });
+
+  if (data) {
+    toast.success(data);
+  }
+
+  if (isError) {
+    toast.error(error);
+  }
 
   return (
     <Card className="my-4">
