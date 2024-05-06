@@ -57,7 +57,12 @@ export const ROUTES = {
       signup: "/api/auth/signup",
       logout: "/api/auth/logout",
     },
-    notes: "/api/notes",
+    notes: {
+      createNote: "/api/notes/createnote",
+      getNotes: "/api/notes/getnotes",
+      updateNote: "/api/notes/updatenote",
+      deleteNote: "/api/notes/deletenote",
+    },
     todos: "/api/todos",
     user: {
       getUser: "/api/users/getUser/",
