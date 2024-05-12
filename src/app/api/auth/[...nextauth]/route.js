@@ -38,7 +38,7 @@ const authOptions = {
       if (user) {
         token.fullName = user.fullName;
         token.avatarUrl = user.avatarUrl;
-        token.id = user.id;
+        token.id = user._id;
       }
       return token;
     },

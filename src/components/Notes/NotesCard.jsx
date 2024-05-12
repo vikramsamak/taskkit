@@ -11,15 +11,17 @@ import { Button } from "../ui/button";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
-import { useAuthContext } from "@/Contexts/SessionProvider";
 import { NOTES, ROUTES } from "@/helpers/Constants";
 import { getBaseURl } from "@/helpers/helperFunctions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function NotesCard({ note, openEditDialog }) {
-  // const authUSer = useAuthContext();
-  const notesQuery = [authUSer._id, NOTES];
+  const { user } = useCurrentUser();
+
+  const notesQuery = [user.id, NOTES];
+
   const queryClient = useQueryClient();
 
   const deleteNote = async (noteId) => {
