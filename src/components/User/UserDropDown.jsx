@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
 import Loader from "../SharedComponents/Loader";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function UserDropDown() {
-  const { data: currentUser, status } = useSession();
-  const user = currentUser?.user;
+  const { status, user } = useCurrentUser();
 
   const logOut = async () => {
     signOut();

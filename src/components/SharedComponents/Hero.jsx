@@ -1,7 +1,7 @@
 import UserLoginForm from "../User/UserLoginForm";
 
 function Hero() {
-  return <UserLoginForm />;
+  return <></>;
 }
 
 export default Hero;

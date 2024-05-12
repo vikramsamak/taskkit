@@ -4,11 +4,10 @@ import AppMainSection from "../SharedComponents/AppMainSection";
 import AppWindowHeader from "../SharedComponents/AppWindowHeader";
 import UserAvatar from "./UserAvatar";
 import AppWindow from "../SharedComponents/AppWindow";
-import { useSession } from "next-auth/react";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function UserProfileWindow() {
-  const { data: currentUser, status } = useSession();
-  const user = currentUser?.user;
+  const { user } = useCurrentUser();
 
   return (
     <AppWindow>
