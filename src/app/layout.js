@@ -1,10 +1,10 @@
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
-import { ThemeProvider } from "@/components/SharedComponents/ThemeProvider";
+import { ThemeProvider } from "@/Contexts/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/Contexts/SessionProvider";
-import ReactQueryProvider from "@/components/SharedComponents/ReactQueryProvider";
+import ReactQueryProvider from "@/Contexts/ReactQueryProvider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
