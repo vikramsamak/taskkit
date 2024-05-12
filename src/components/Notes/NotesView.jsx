@@ -1,15 +1,16 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NotesCard from "./NotesCard";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthContext } from "@/Contexts/AuthContexts";
 import { getBaseURl } from "@/helpers/helperFunctions";
 import { NOTES, ROUTES } from "@/helpers/Constants";
 import axios from "axios";
 import Loader from "../SharedComponents/Loader";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function NotesView({ openEditDialog }) {
-  const authUSer = useAuthContext();
-  const notesQuery = [authUSer._id, NOTES];
+  const { user } = useCurrentUser();
+
+  const notesQuery = [user.id, NOTES];
 
   const getNotes = async () => {
     const baseUrl = getBaseURl();

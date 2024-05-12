@@ -13,17 +13,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { ROUTES } from "@/helpers/Constants";
 import { useRouter } from "next/navigation";
 import Loader from "../SharedComponents/Loader";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import axios from "axios";
-import { useAuthContext } from "@/Contexts/AuthContexts";
-import { getBaseURl } from "@/helpers/helperFunctions";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 function UserLoginForm() {
-  const { setUser } = useAuthContext();
+  const [isLoading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const formSchema = z.object({
@@ -44,37 +42,30 @@ function UserLoginForm() {
   });
 
   const login = async (data) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.auth.signin}`;
-
     try {
-      const res = await axios.post(URL, data);
+      setLoading(true);
 
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
+      const res = await signIn("credentials", {
+        username: data.username,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (res.error) {
+        toast.error(res.error);
       }
-
-      return res.data;
+      if (res.ok) {
+        router.push("/apps/profile");
+      }
     } catch (error) {
-      toast.warning(error.message);
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const { data, isPending, mutateAsync } = useMutation({
-    mutationFn: login,
-    onError: (error) => {
-      toast.warning(error);
-    },
-  });
-
-  function onSubmit(values) {
-    mutateAsync(values);
-  }
-
-  if (data) {
-    localStorage.setItem("CURRENTUSER", JSON.stringify(data));
-    setUser(data);
-    router.push(ROUTES.page.protected.profile);
+  async function onSubmit(values) {
+    await login(values);
   }
 
   return (
@@ -120,7 +111,7 @@ function UserLoginForm() {
               type="submit"
               className="inline-flex justify-center items-center"
             >
-              {isPending ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <span className="font-mono tracking-wider">Login</span>

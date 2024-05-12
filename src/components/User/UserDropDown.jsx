@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,58 +7,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
-import { useAuthContext } from "@/Contexts/AuthContexts";
-import { useMutation } from "@tanstack/react-query";
-import { DEV_ENV_URL, ROUTES } from "@/helpers/Constants";
-import axios from "axios";
 import Loader from "../SharedComponents/Loader";
+import { signOut } from "next-auth/react";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function UserDropDown() {
-  const { user, setUser } = useAuthContext();
-  const router = useRouter();
+  const { status, user } = useCurrentUser();
 
   const logOut = async () => {
-    var URL = undefined;
-    if (process.env.NODE_ENV == "development") {
-      URL = `${DEV_ENV_URL}${ROUTES.api.auth.logout}`;
-    }
-    try {
-      const res = await axios.post(URL);
-
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.warning(error.message);
-    }
+    signOut();
   };
 
-  const { ispending, mutateAsync } = useMutation({
-    mutationFn: logOut,
-    onError: (error) => {
-      toast.warning(error);
-    },
-    onSuccess: () => {
-      localStorage.removeItem("CURRENTUSER");
-      setUser(null);
-      router.push(ROUTES.page.index);
-    },
-  });
-
-  const handlelogout = () => {
-    mutateAsync();
-  };
+  async function handlelogout() {
+    await logOut();
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        {ispending ? <Loader /> : <UserAvatar photoUrl={user?.avatarUrl} />}
+        {status === "loading" ? (
+          <Loader />
+        ) : (
+          <UserAvatar photoUrl={user?.avatarUrl} />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem
           onClick={() => {
-            router.push("/profile");
+            router.push("/apps/profile");
           }}
         >
           Profile

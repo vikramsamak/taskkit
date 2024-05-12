@@ -1,8 +1,6 @@
 import React from "react";
 import ThemeSelector from "./ThemeSelector";
-import { useAuthContext } from "@/Contexts/AuthContexts";
 import UserDropDown from "../User/UserDropDown";
-import Link from "next/link";
 
 function Header() {
   return (
