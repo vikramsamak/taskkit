@@ -3,11 +3,12 @@ import { PROFILE } from "@/helpers/Constants";
 import AppMainSection from "../SharedComponents/AppMainSection";
 import AppWindowHeader from "../SharedComponents/AppWindowHeader";
 import UserAvatar from "./UserAvatar";
-import { useAuthContext } from "@/Contexts/AuthContexts";
 import AppWindow from "../SharedComponents/AppWindow";
+import { useSession } from "next-auth/react";
 
 function UserProfileWindow() {
-  const { user } = useAuthContext();
+  const { data: currentUser, status } = useSession();
+  const user = currentUser?.user;
 
   return (
     <AppWindow>

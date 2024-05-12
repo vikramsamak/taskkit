@@ -25,24 +25,15 @@ export async function POST(req) {
 
     const avatarUrl = await getAvatar(username);
 
-    const newUser = new Users({
+    const savedUser = await Users.create({
       fullName,
       username,
       password: hashedPasswrod,
       avatarUrl,
     });
 
-    if (newUser) {
-      await newUser.save();
-
-      const response = NextResponse.json({
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        username: newUser.username,
-        avatarUrl: newUser.avatarUrl,
-      });
-
-      return response;
+    if (savedUser) {
+      return NextResponse.json({ message: "User Registered" }, { status: 201 });
     } else {
       return NextResponse.json({ error: "Invalid user data" }, { status: 400 });
     }

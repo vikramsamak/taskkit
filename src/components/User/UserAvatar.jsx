@@ -2,10 +2,11 @@
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
-import { useAuthContext } from "@/Contexts/AuthContexts";
+import { useSession } from "next-auth/react";
 
 function UserAvatar({ size, photoUrl }) {
-  const { user } = useAuthContext();
+  const { data: currentUser, status } = useSession();
+  const user = currentUser?.user;
   let fallBackText;
 
   if (user && user.fullName) {

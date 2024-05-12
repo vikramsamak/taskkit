@@ -3,7 +3,7 @@ import "./globals.css";
 import { cn } from "../lib/utils";
 import { ThemeProvider } from "@/components/SharedComponents/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthContextProvider } from "@/Contexts/AuthContexts";
+import { AuthProvider } from "@/Contexts/SessionProvider";
 import ReactQueryProvider from "@/components/SharedComponents/ReactQueryProvider";
 
 export const fontSans = FontSans({
@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <ReactQueryProvider>
-            <AuthContextProvider>{children}</AuthContextProvider>
+            <AuthProvider>{children}</AuthProvider>
           </ReactQueryProvider>
           <Toaster position="top-center" />
         </ThemeProvider>

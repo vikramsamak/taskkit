@@ -17,13 +17,13 @@ import axios from "axios";
 import { getBaseURl } from "@/helpers/helperFunctions";
 import { NOTES, ROUTES } from "@/helpers/Constants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthContext } from "@/Contexts/AuthContexts";
+// import { useAuthContext } from "@/Contexts/SessionProvider";
 import Loader from "../SharedComponents/Loader";
 import { toast } from "sonner";
 
 function NotesForm({ setIsModalOpen, editNote }) {
   const queryClient = useQueryClient();
-  const authUSer = useAuthContext();
+  // const authUSer = useAuthContext();
 
   const notesForm = z.object({
     title: z
@@ -58,7 +58,7 @@ function NotesForm({ setIsModalOpen, editNote }) {
     }
   };
 
-  const notesQuery = [authUSer._id, NOTES];
+  // const notesQuery = [authUSer._id, NOTES];
 
   const {
     data: createData,
