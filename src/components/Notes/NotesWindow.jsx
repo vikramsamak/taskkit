@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppWindow from "../SharedComponents/AppWindow";
 import AppWindowHeader from "../SharedComponents/AppWindowHeader";
 import { NOTES } from "@/helpers/Constants";
@@ -11,6 +11,12 @@ import NotesForm from "./NotesForm";
 function NotesWindow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setEditNote(null);
+    }
+  }, [isModalOpen]);
 
   const openEditDialog = (note) => {
     setEditNote(note);

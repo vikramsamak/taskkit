@@ -9,6 +9,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 
 function NotesView({ openEditDialog }) {
   const { user } = useCurrentUser();
+
   const notesQuery = [user.id, NOTES];
 
   const getNotes = async () => {
