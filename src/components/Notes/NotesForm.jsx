@@ -14,19 +14,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import Loader from "../SharedComponents/Loader";
-import { toast } from "sonner";
 
 function NotesForm({
   editNote,
-  createData,
-  iscreateError,
-  createError,
-  iscreatePending,
+  isCreatePending,
   createMutate,
-  upadteData,
-  isupdateError,
-  updateError,
-  isupdatePending,
+  isUpdatePending,
   updateMutate,
 }) {
   const notesForm = z.object({
@@ -57,8 +50,6 @@ function NotesForm({
       createMutate(values);
     }
   }
-
-
 
   return (
     <Form {...form}>
@@ -93,7 +84,7 @@ function NotesForm({
           )}
         />
         <Button type="submit">
-          {iscreatePending || isupdatePending ? (
+          {isCreatePending || isUpdatePending ? (
             <Loader />
           ) : editNote ? (
             "Update"

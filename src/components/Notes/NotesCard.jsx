@@ -12,7 +12,7 @@ import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import Loader from "../SharedComponents/Loader";
 
-function NotesCard({ note, openEditDialog, isdeletePending, deleteMutate }) {
+function NotesCard({ note, openEditDialog, isDeletePending, deleteMutate }) {
   return (
     <Card className="my-4">
       <CardHeader>
@@ -30,14 +30,18 @@ function NotesCard({ note, openEditDialog, isdeletePending, deleteMutate }) {
         >
           <MdEdit />
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            deleteMutate(note._id);
-          }}
-        >
-          {isdeletePending ? <Loader /> : <MdDelete />}
-        </Button>
+        {isDeletePending ? (
+          <Loader />
+        ) : (
+          <Button
+            variant="secondary"
+            onClick={() => {
+              deleteMutate(note._id);
+            }}
+          >
+            <MdDelete />
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

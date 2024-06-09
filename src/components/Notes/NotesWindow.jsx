@@ -43,15 +43,15 @@ function NotesWindow() {
         return Promise.reject(res.data.error);
       }
     } catch (error) {
-      console.log(error);
+      return Promise.reject(error);
     }
   };
 
   const {
     data: createData,
-    isError: iscreateError,
+    isError: isCreateError,
     error: createError,
-    isPending: iscreatePending,
+    isPending: isCreatePending,
     mutate: createMutate,
   } = useMutation({
     mutationFn: createNote,
@@ -73,7 +73,7 @@ function NotesWindow() {
         return Promise.reject(res.data.error);
       }
     } catch (error) {
-      console.error(error);
+      return Promise.reject(error);
     }
   };
 
@@ -87,7 +87,7 @@ function NotesWindow() {
     queryFn: getNotes,
   });
 
-  const upadteNote = async (noteData) => {
+  const updateNote = async (noteData) => {
     const baseUrl = getBaseURl();
     const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
     try {
@@ -99,18 +99,18 @@ function NotesWindow() {
         return Promise.reject(res.data.error);
       }
     } catch (error) {
-      console.log(error);
+      return Promise.reject(error);
     }
   };
 
   const {
-    data: upadteData,
-    isError: isupdateError,
+    data: updateData,
+    isError: isUpdateError,
     error: updateError,
-    isPending: isupdatePending,
+    isPending: isUpdatePending,
     mutate: updateMutate,
   } = useMutation({
-    mutationFn: upadteNote,
+    mutationFn: updateNote,
     onSuccess: () => {
       setIsModalOpen(false);
       queryClient.invalidateQueries({ queryKey: notesQuery });
@@ -129,15 +129,15 @@ function NotesWindow() {
         return Promise.reject(res.data.error);
       }
     } catch (error) {
-      console.log(error);
+      return Promise.reject(error);
     }
   };
 
   const {
     data: deleteData,
-    isError: isdeleteError,
+    isError: isDeleteError,
     error: deleteError,
-    isPending: isdeletePending,
+    isPending: isDeletePending,
     mutate: deleteMutate,
   } = useMutation({
     mutationFn: deleteNote,
@@ -146,15 +146,17 @@ function NotesWindow() {
     },
   });
 
-  if (createData || upadteData || deleteData) {
-    let successNotification = createData || upadteData || deleteData;
-    toast.success(successNotification);
-  }
+  useEffect(() => {
+    if (createData || updateData || deleteData) {
+      let successNotification = createData || updateData || deleteData;
+      toast.success(successNotification);
+    }
 
-  if (iscreateError || isupdateError || isdeleteError) {
-    let errorNotification = createError || updateError || deleteError;
-    toast.error(errorNotification);
-  }
+    if (isCreateError || isUpdateError || isDeleteError) {
+      let errorNotification = createError?.message || updateError?.message || deleteError?.message;
+      toast.error(errorNotification);
+    }
+  }, [createData, updateData, deleteData, isCreateError, isUpdateError, isDeleteError, createError, updateError, deleteError]);
 
   return (
     <AppWindow>
@@ -167,9 +169,9 @@ function NotesWindow() {
           dialogContent={
             <NotesForm
               editNote={editNote}
-              iscreatePending={iscreatePending}
+              isCreatePending={isCreatePending}
               createMutate={createMutate}
-              isupdatePending={isupdatePending}
+              isUpdatePending={isUpdatePending}
               updateMutate={updateMutate}
             />
           }
@@ -182,7 +184,7 @@ function NotesWindow() {
         isFetchingError={isFetchingError}
         isFetchingPending={isFetchingPending}
         fetchError={fetchError}
-        isdeletePending={isdeletePending}
+        isDeletePending={isDeletePending}
         deleteMutate={deleteMutate}
       />
     </AppWindow>

@@ -8,7 +8,7 @@ function NotesView({
   isFetchingError,
   isFetchingPending,
   fetchError,
-  isdeletePending,
+  isDeletePending,
   deleteMutate,
 }) {
   return (
@@ -29,7 +29,7 @@ function NotesView({
               key={i}
               note={note}
               openEditDialog={openEditDialog}
-              isdeletePending={isdeletePending}
+              isDeletePending={isDeletePending}
               deleteMutate={deleteMutate}
             />
           ))
