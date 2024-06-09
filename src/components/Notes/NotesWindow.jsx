@@ -19,6 +19,12 @@ function NotesWindow() {
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
   const notesQuery = [user?.id, NOTES];
+  const [createSuccessMessage, setCreateSuccessMessage] = useState("");
+  const [createErrorMessage, setCreateErrorMessage] = useState("");
+  const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
+  const [updateErrorMessage, setUpdateErrorMessage] = useState("");
+  const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState("");
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -55,9 +61,13 @@ function NotesWindow() {
     mutate: createMutate,
   } = useMutation({
     mutationFn: createNote,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setCreateSuccessMessage(data);
       setIsModalOpen(false);
       queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+    onError: (error) => {
+      setCreateErrorMessage(error.message);
     },
   });
 
@@ -111,9 +121,13 @@ function NotesWindow() {
     mutate: updateMutate,
   } = useMutation({
     mutationFn: updateNote,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setUpdateSuccessMessage(data);
       setIsModalOpen(false);
       queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+    onError: (error) => {
+      setUpdateErrorMessage(error.message);
     },
   });
 
@@ -141,22 +155,53 @@ function NotesWindow() {
     mutate: deleteMutate,
   } = useMutation({
     mutationFn: deleteNote,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setDeleteSuccessMessage(data);
       queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+    onError: (error) => {
+      setDeleteErrorMessage(error.message);
     },
   });
 
   useEffect(() => {
-    if (createData || updateData || deleteData) {
-      let successNotification = createData || updateData || deleteData;
-      toast.success(successNotification);
+    if (createSuccessMessage) {
+      toast.success(createSuccessMessage);
+      setCreateSuccessMessage("");
     }
 
-    if (isCreateError || isUpdateError || isDeleteError) {
-      let errorNotification = createError?.message || updateError?.message || deleteError?.message;
-      toast.error(errorNotification);
+    if (updateSuccessMessage) {
+      toast.success(updateSuccessMessage);
+      setUpdateSuccessMessage("");
     }
-  }, [createData, updateData, deleteData, isCreateError, isUpdateError, isDeleteError, createError, updateError, deleteError]);
+
+    if (deleteSuccessMessage) {
+      toast.success(deleteSuccessMessage);
+      setDeleteSuccessMessage("");
+    }
+
+    if (createErrorMessage) {
+      toast.error(createErrorMessage);
+      setCreateErrorMessage("");
+    }
+
+    if (updateErrorMessage) {
+      toast.error(updateErrorMessage);
+      setUpdateErrorMessage("");
+    }
+
+    if (deleteErrorMessage) {
+      toast.error(deleteErrorMessage);
+      setDeleteErrorMessage("");
+    }
+  }, [
+    createSuccessMessage,
+    updateSuccessMessage,
+    deleteSuccessMessage,
+    createErrorMessage,
+    updateErrorMessage,
+    deleteErrorMessage,
+  ]);
 
   return (
     <AppWindow>
