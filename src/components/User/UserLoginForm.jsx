@@ -72,7 +72,7 @@ function UserLoginForm() {
     <section className="flex flex-col gap-2 rounded-sm border border-input shadow-xl h-[500px] w-[600px]">
       <div className="flex w-full justify-center border-b border-input h-16 px-2 py-2">
         <div className="flex items-center">
-          <p className="font-mono tracking-widest">Login</p>
+          <p className="font-mono tracking-widest uppercase">Login</p>
         </div>
       </div>
       <div className="flex-1 flex justify-center gap-2 h-full items-center px-2 py-2">
@@ -86,9 +86,15 @@ function UserLoginForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="font-mono tracking-wider uppercase">
+                    Username
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="username" {...field} />
+                    <Input
+                      placeholder="username"
+                      {...field}
+                      className="placeholder:font-mono tracking-wider"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -99,9 +105,16 @@ function UserLoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="font-mono tracking-wider">
+                    Password
+                  </FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="password"
+                      {...field}
+                      className="placeholder:font-mono tracking-wider"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,16 +127,21 @@ function UserLoginForm() {
               {isLoading ? (
                 <Loader />
               ) : (
-                <span className="font-mono tracking-wider">Login</span>
+                <span className="font-mono tracking-wider uppercase">
+                  Login
+                </span>
               )}
             </Button>
           </form>
         </Form>
       </div>
       <div className="flex w-full justify-center">
-        <p className="text-center font-mono tracking-wider">
+        <p className="text-center font-mono tracking-wider uppercase">
           Don&apos;t have a account ?
-          <Link href="/signup" className="hover:underline ml-2">
+          <Link
+            href="/signup"
+            className="hover:underline ml-2 font-mono tracking-wider uppercase"
+          >
             SignUp
           </Link>
         </p>

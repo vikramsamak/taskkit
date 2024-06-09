@@ -87,7 +87,7 @@ function UserSignUpForm() {
     <section className="flex flex-col gap-2 rounded-sm border border-input shadow-xl h-[500px] w-[600px]">
       <div className="flex w-full justify-center border-b border-input h-16 px-2 py-2">
         <div className="flex items-center">
-          <p className="font-mono tracking-widest">Sign Up</p>
+          <p className="font-mono tracking-widest uppercase">Sign Up</p>
         </div>
       </div>
       <div className="flex-1 flex justify-center gap-2 px-2 py-2">
@@ -101,9 +101,15 @@ function UserSignUpForm() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel className="font-mono tracking-wider uppercase">
+                    Full Name
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Full name" {...field} />
+                    <Input
+                      placeholder="Full name"
+                      {...field}
+                      className="placeholder:font-mono tracking-wider"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,9 +120,15 @@ function UserSignUpForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="font-mono tracking-wider uppercase">
+                    Username
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input
+                      placeholder="Username"
+                      {...field}
+                      className="placeholder:font-mono tracking-wider"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,9 +139,16 @@ function UserSignUpForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="font-mono tracking-wider uppercase">
+                    Password
+                  </FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      {...field}
+                      className="placeholder:font-mono tracking-wider"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,12 +159,15 @@ function UserSignUpForm() {
               name="confirm_password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel className="font-mono tracking-wider uppercase">
+                    Confirm Password
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="Confirm Password"
                       {...field}
+                      className="placeholder:font-mono tracking-wider"
                     />
                   </FormControl>
                   <FormMessage />
@@ -159,16 +181,21 @@ function UserSignUpForm() {
               {isPending ? (
                 <Loader />
               ) : (
-                <span className="font-mono tracking-wider">Sign Up</span>
+                <span className="font-mono tracking-wider uppercase">
+                  Sign Up
+                </span>
               )}
             </Button>
           </form>
         </Form>
       </div>
       <div className="flex w-full justify-center">
-        <p className="text-center font-mono tracking-wider">
+        <p className="text-center font-mono tracking-wider uppercase">
           Already have a account ?
-          <Link href="/" className="hover:underline ml-2">
+          <Link
+            href="/signin"
+            className="hover:underline ml-2 font-mono tracking-wider uppercase"
+          >
             Login
           </Link>
         </p>
