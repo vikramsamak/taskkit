@@ -11,6 +11,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBaseURl } from "@/helpers/helperFunctions";
 import axios from "axios";
+import { toast } from "sonner";
 
 function NotesWindow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,6 +87,52 @@ function NotesWindow() {
     queryFn: getNotes,
   });
 
+  const upadteNote = async (noteData) => {
+    const baseUrl = getBaseURl();
+    const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
+    try {
+      const res = await axios.put(URL, noteData);
+      if (res.data.message) {
+        return res.data.message;
+      }
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const {
+    data: upadteData,
+    isError: isupdateError,
+    error: updateError,
+    isPending: isupdatePending,
+    mutate: updateMutate,
+  } = useMutation({
+    mutationFn: upadteNote,
+    onSuccess: () => {
+      setIsModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+  });
+
+  if (createData || upadteData) {
+    if (editNote) {
+      toast.success(upadteData);
+    } else {
+      toast.success(createData);
+    }
+  }
+
+  if (iscreateError || isupdateError) {
+    if (editNote) {
+      toast.error(updateError);
+    } else {
+      toast.error(createError);
+    }
+  }
+
   return (
     <AppWindow>
       <AppWindowHeader windowName={NOTES}></AppWindowHeader>
@@ -96,13 +143,11 @@ function NotesWindow() {
           buttonText={"Add New Note"}
           dialogContent={
             <NotesForm
-              setIsModalOpen={setIsModalOpen}
               editNote={editNote}
-              createData={createData}
-              iscreateError={iscreateError}
-              createError={createError}
               iscreatePending={iscreatePending}
               createMutate={createMutate}
+              isupdatePending={isupdatePending}
+              updateMutate={updateMutate}
             />
           }
           dialogTitle={editNote ? "Update Note" : "Create New Note"}

@@ -20,7 +20,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 function NotesCard({ note, openEditDialog }) {
   const { user } = useCurrentUser();
 
-  const notesQuery = [user.id, NOTES];
+  const notesQuery = [user?.id, NOTES];
 
   const queryClient = useQueryClient();
 

@@ -13,21 +13,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
-import axios from "axios";
-import { getBaseURl } from "@/helpers/helperFunctions";
-import { ROUTES } from "@/helpers/Constants";
-import { useMutation } from "@tanstack/react-query";
 import Loader from "../SharedComponents/Loader";
 import { toast } from "sonner";
 
 function NotesForm({
-  setIsModalOpen,
   editNote,
   createData,
   iscreateError,
   createError,
   iscreatePending,
   createMutate,
+  upadteData,
+  isupdateError,
+  updateError,
+  isupdatePending,
+  updateMutate,
 }) {
   const notesForm = z.object({
     title: z
@@ -46,36 +46,6 @@ function NotesForm({
     },
   });
 
-  const upadteNote = async (noteData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
-    try {
-      const res = await axios.put(URL, noteData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const {
-    data: upadteData,
-    isError: isupdateError,
-    error: updateError,
-    isPending: isupdatePending,
-    mutate: updateMutate,
-  } = useMutation({
-    mutationFn: upadteNote,
-    onSuccess: () => {
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-  });
-
   function onSubmit(values) {
     if (editNote) {
       updateMutate({
@@ -88,21 +58,7 @@ function NotesForm({
     }
   }
 
-  if (createData || upadteData) {
-    if (editNote) {
-      toast.success(upadteData);
-    } else {
-      toast.success(createData);
-    }
-  }
 
-  if (iscreateError || isupdateError) {
-    if (editNote) {
-      toast.error(updateError);
-    } else {
-      toast.error(createError);
-    }
-  }
 
   return (
     <Form {...form}>
