@@ -1,54 +1,37 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NotesCard from "./NotesCard";
-import { useQuery } from "@tanstack/react-query";
-import { getBaseURl } from "@/helpers/helperFunctions";
-import { NOTES, ROUTES } from "@/helpers/Constants";
-import axios from "axios";
 import Loader from "../SharedComponents/Loader";
-import useCurrentUser from "@/hooks/useCurrentUser";
 
-function NotesView({ openEditDialog }) {
-  const { user } = useCurrentUser();
-
-  const notesQuery = [user.id, NOTES];
-
-  const getNotes = async () => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.getNotes}`;
-    try {
-      const res = await axios.get(URL);
-      if (res.data) {
-        return res.data.notes;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const { data, isError, isPending, error } = useQuery({
-    queryKey: notesQuery,
-    queryFn: getNotes,
-  });
-
+function NotesView({
+  openEditDialog,
+  notesData,
+  isFetchingError,
+  isFetchingPending,
+  fetchError,
+}) {
   return (
     <ScrollArea className="grow h-full px-2 py-2">
-      {isError && (
+      {isFetchingError && (
         <div className="flex w-full justify-center items-center">
-          <p>{error}</p>
+          <p>{fetchError}</p>
         </div>
       )}
-      {isPending && (
+      {isFetchingPending && (
         <div className="flex w-full justify-center items-center">
           <Loader />
         </div>
       )}
-      {data &&
-        data.map((note, i) => (
+      {notesData && notesData.length > 0 ? (
+        notesData.map((note, i) => (
           <NotesCard key={i} note={note} openEditDialog={openEditDialog} />
-        ))}
+        ))
+      ) : (
+        <div className="flex w-full justify-center items-center">
+          <p className="font-mono tracking-wider text-sm sm:text-base uppercase">
+            No Notes Available...
+          </p>
+        </div>
+      )}
     </ScrollArea>
   );
 }
