@@ -117,20 +117,43 @@ function NotesWindow() {
     },
   });
 
-  if (createData || upadteData) {
-    if (editNote) {
-      toast.success(upadteData);
-    } else {
-      toast.success(createData);
+  const deleteNote = async (noteId) => {
+    const baseUrl = getBaseURl();
+    const URL = `${baseUrl}${ROUTES.api.notes.deleteNote}?noteId=${noteId}`;
+    try {
+      const res = await axios.delete(URL);
+      if (res.data.message) {
+        return res.data.message;
+      }
+      if (res.data.error) {
+        return Promise.reject(res.data.error);
+      }
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  const {
+    data: deleteData,
+    isError: isdeleteError,
+    error: deleteError,
+    isPending: isdeletePending,
+    mutate: deleteMutate,
+  } = useMutation({
+    mutationFn: deleteNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: notesQuery });
+    },
+  });
+
+  if (createData || upadteData || deleteData) {
+    let successNotification = createData || upadteData || deleteData;
+    toast.success(successNotification);
   }
 
-  if (iscreateError || isupdateError) {
-    if (editNote) {
-      toast.error(updateError);
-    } else {
-      toast.error(createError);
-    }
+  if (iscreateError || isupdateError || isdeleteError) {
+    let errorNotification = createError || updateError || deleteError;
+    toast.error(errorNotification);
   }
 
   return (
@@ -159,6 +182,8 @@ function NotesWindow() {
         isFetchingError={isFetchingError}
         isFetchingPending={isFetchingPending}
         fetchError={fetchError}
+        isdeletePending={isdeletePending}
+        deleteMutate={deleteMutate}
       />
     </AppWindow>
   );

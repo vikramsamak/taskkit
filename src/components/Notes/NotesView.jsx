@@ -8,6 +8,8 @@ function NotesView({
   isFetchingError,
   isFetchingPending,
   fetchError,
+  isdeletePending,
+  deleteMutate,
 }) {
   return (
     <ScrollArea className="grow h-full px-2 py-2">
@@ -23,7 +25,13 @@ function NotesView({
       )}
       {notesData && notesData.length > 0
         ? notesData.map((note, i) => (
-            <NotesCard key={i} note={note} openEditDialog={openEditDialog} />
+            <NotesCard
+              key={i}
+              note={note}
+              openEditDialog={openEditDialog}
+              isdeletePending={isdeletePending}
+              deleteMutate={deleteMutate}
+            />
           ))
         : !isFetchingPending && (
             <div className="flex w-full justify-center items-center">

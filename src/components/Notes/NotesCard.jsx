@@ -10,51 +10,9 @@ import {
 import { Button } from "../ui/button";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import axios from "axios";
-import { NOTES, ROUTES } from "@/helpers/Constants";
-import { getBaseURl } from "@/helpers/helperFunctions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import Loader from "../SharedComponents/Loader";
 
-function NotesCard({ note, openEditDialog }) {
-  const { user } = useCurrentUser();
-
-  const notesQuery = [user?.id, NOTES];
-
-  const queryClient = useQueryClient();
-
-  const deleteNote = async (noteId) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.deleteNote}?noteId=${noteId}`;
-    try {
-      const res = await axios.delete(URL);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const { data, mutate, error, isError } = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-  });
-
-  if (data) {
-    toast.success(data);
-  }
-
-  if (isError) {
-    toast.error(error);
-  }
-
+function NotesCard({ note, openEditDialog, isdeletePending, deleteMutate }) {
   return (
     <Card className="my-4">
       <CardHeader>
@@ -75,10 +33,10 @@ function NotesCard({ note, openEditDialog }) {
         <Button
           variant="secondary"
           onClick={() => {
-            mutate(note._id);
+            deleteMutate(note._id);
           }}
         >
-          <MdDelete />
+          {isdeletePending ? <Loader /> : <MdDelete />}
         </Button>
       </CardFooter>
     </Card>
