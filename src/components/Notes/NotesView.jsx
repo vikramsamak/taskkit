@@ -21,17 +21,17 @@ function NotesView({
           <Loader />
         </div>
       )}
-      {notesData && notesData.length > 0 ? (
-        notesData.map((note, i) => (
-          <NotesCard key={i} note={note} openEditDialog={openEditDialog} />
-        ))
-      ) : (
-        <div className="flex w-full justify-center items-center">
-          <p className="font-mono tracking-wider text-sm sm:text-base uppercase">
-            No Notes Available...
-          </p>
-        </div>
-      )}
+      {notesData && notesData.length > 0
+        ? notesData.map((note, i) => (
+            <NotesCard key={i} note={note} openEditDialog={openEditDialog} />
+          ))
+        : !isFetchingPending && (
+            <div className="flex w-full justify-center items-center">
+              <p className="font-mono tracking-wider text-sm sm:text-base uppercase">
+                No Notes Available...
+              </p>
+            </div>
+          )}
     </ScrollArea>
   );
 }

@@ -15,16 +15,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import axios from "axios";
 import { getBaseURl } from "@/helpers/helperFunctions";
-import { NOTES, ROUTES } from "@/helpers/Constants";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ROUTES } from "@/helpers/Constants";
+import { useMutation } from "@tanstack/react-query";
 import Loader from "../SharedComponents/Loader";
 import { toast } from "sonner";
-import useCurrentUser from "@/hooks/useCurrentUser";
 
-function NotesForm({ setIsModalOpen, editNote }) {
-  const queryClient = useQueryClient();
-  const { user } = useCurrentUser();
-
+function NotesForm({
+  setIsModalOpen,
+  editNote,
+  createData,
+  iscreateError,
+  createError,
+  iscreatePending,
+  createMutate,
+}) {
   const notesForm = z.object({
     title: z
       .string()
@@ -39,38 +43,6 @@ function NotesForm({ setIsModalOpen, editNote }) {
     defaultValues: {
       title: editNote ? editNote.title : "",
       description: editNote ? editNote.description : "",
-    },
-  });
-
-  const createNote = async (notesData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.createNote}`;
-    try {
-      const res = await axios.post(URL, notesData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const notesQuery = [user.id, NOTES];
-
-  const {
-    data: createData,
-    isError: iscreateError,
-    error: createError,
-    isPending: iscreatePending,
-    mutate: createMutate,
-  } = useMutation({
-    mutationFn: createNote,
-    onSuccess: () => {
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
     },
   });
 
