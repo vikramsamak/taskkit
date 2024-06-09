@@ -13,18 +13,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
-import axios from "axios";
-import { getBaseURl } from "@/helpers/helperFunctions";
-import { NOTES, ROUTES } from "@/helpers/Constants";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Loader from "../SharedComponents/Loader";
-import { toast } from "sonner";
-import useCurrentUser from "@/hooks/useCurrentUser";
 
-function NotesForm({ setIsModalOpen, editNote }) {
-  const queryClient = useQueryClient();
-  const { user } = useCurrentUser();
-
+function NotesForm({
+  editNote,
+  isCreatePending,
+  createMutate,
+  isUpdatePending,
+  updateMutate,
+}) {
   const notesForm = z.object({
     title: z
       .string()
@@ -42,68 +39,6 @@ function NotesForm({ setIsModalOpen, editNote }) {
     },
   });
 
-  const createNote = async (notesData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.createNote}`;
-    try {
-      const res = await axios.post(URL, notesData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const notesQuery = [user.id, NOTES];
-
-  const {
-    data: createData,
-    isError: iscreateError,
-    error: createError,
-    isPending: iscreatePending,
-    mutate: createMutate,
-  } = useMutation({
-    mutationFn: createNote,
-    onSuccess: () => {
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-  });
-
-  const upadteNote = async (noteData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
-    try {
-      const res = await axios.put(URL, noteData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const {
-    data: upadteData,
-    isError: isupdateError,
-    error: updateError,
-    isPending: isupdatePending,
-    mutate: updateMutate,
-  } = useMutation({
-    mutationFn: upadteNote,
-    onSuccess: () => {
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-  });
-
   function onSubmit(values) {
     if (editNote) {
       updateMutate({
@@ -113,22 +48,6 @@ function NotesForm({ setIsModalOpen, editNote }) {
       });
     } else {
       createMutate(values);
-    }
-  }
-
-  if (createData || upadteData) {
-    if (editNote) {
-      toast.success(upadteData);
-    } else {
-      toast.success(createData);
-    }
-  }
-
-  if (iscreateError || isupdateError) {
-    if (editNote) {
-      toast.error(updateError);
-    } else {
-      toast.error(createError);
     }
   }
 
@@ -165,7 +84,7 @@ function NotesForm({ setIsModalOpen, editNote }) {
           )}
         />
         <Button type="submit">
-          {iscreatePending || isupdatePending ? (
+          {isCreatePending || isUpdatePending ? (
             <Loader />
           ) : editNote ? (
             "Update"
