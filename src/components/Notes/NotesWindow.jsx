@@ -2,16 +2,12 @@
 import React, { useEffect, useState } from "react";
 import AppWindow from "../SharedComponents/AppWindow";
 import AppWindowHeader from "../SharedComponents/AppWindowHeader";
-import { NOTES, ROUTES } from "@/helpers/Constants";
+import { NOTES } from "@/helpers/Constants";
 import AppMainSection from "../SharedComponents/AppMainSection";
 import AppDailog from "../SharedComponents/AppDailog";
 import NotesView from "./NotesView";
 import NotesForm from "./NotesForm";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getBaseURl } from "@/helpers/helperFunctions";
-import axios from "axios";
-import { toast } from "sonner";
 import useCreateNote from "@/hooks/Notes/useCreateNote";
 import useGetNotes from "@/hooks/Notes/useGetNotes";
 import useUpdateNote from "@/hooks/Notes/useUpdateNote";
