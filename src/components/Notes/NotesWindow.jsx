@@ -15,16 +15,13 @@ import { toast } from "sonner";
 import useCreateNote from "@/hooks/Notes/useCreateNote";
 import useGetNotes from "@/hooks/Notes/useGetNotes";
 import useUpdateNote from "@/hooks/Notes/useUpdateNote";
+import useDeleteNote from "@/hooks/Notes/useDeleteNote";
 
 function NotesWindow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
   const { user } = useCurrentUser();
-  const queryClient = useQueryClient();
   const notesQuery = [user?.id, NOTES];
-
-  const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
-  const [deleteErrorMessage, setDeleteErrorMessage] = useState("");
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -37,9 +34,6 @@ function NotesWindow() {
     setIsModalOpen(true);
   };
 
-  const { mutate: createMutate, isPending: isCreatePending } =
-    useCreateNote(notesQuery);
-
   const {
     data: notesData,
     error: fetchError,
@@ -47,53 +41,14 @@ function NotesWindow() {
     isPending: isFetchingPending,
   } = useGetNotes(notesQuery);
 
+  const { mutate: createMutate, isPending: isCreatePending } =
+    useCreateNote(notesQuery);
+
   const { mutate: updateMutate, isPending: isUpdatePending } =
     useUpdateNote(notesQuery);
 
-  const deleteNote = async (noteId) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.deleteNote}?noteId=${noteId}`;
-    try {
-      const res = await axios.delete(URL);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  const {
-    data: deleteData,
-    isError: isDeleteError,
-    error: deleteError,
-    isPending: isDeletePending,
-    mutate: deleteMutate,
-  } = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: (data) => {
-      setDeleteSuccessMessage(data);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-    onError: (error) => {
-      setDeleteErrorMessage(error.message);
-    },
-  });
-
-  useEffect(() => {
-    if (deleteSuccessMessage) {
-      toast.success(deleteSuccessMessage);
-      setDeleteSuccessMessage("");
-    }
-
-    if (deleteErrorMessage) {
-      toast.error(deleteErrorMessage);
-      setDeleteErrorMessage("");
-    }
-  }, [deleteErrorMessage]);
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteNote(notesQuery);
 
   return (
     <AppWindow>
