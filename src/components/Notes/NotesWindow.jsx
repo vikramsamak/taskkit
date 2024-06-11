@@ -12,6 +12,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBaseURl } from "@/helpers/helperFunctions";
 import axios from "axios";
 import { toast } from "sonner";
+import useCreateNote from "@/hooks/Notes/useCreateNote";
+import useGetNotes from "@/hooks/Notes/useGetNotes";
+import useUpdateNote from "@/hooks/Notes/useUpdateNote";
 
 function NotesWindow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,10 +22,7 @@ function NotesWindow() {
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
   const notesQuery = [user?.id, NOTES];
-  const [createSuccessMessage, setCreateSuccessMessage] = useState("");
-  const [createErrorMessage, setCreateErrorMessage] = useState("");
-  const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
-  const [updateErrorMessage, setUpdateErrorMessage] = useState("");
+
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
   const [deleteErrorMessage, setDeleteErrorMessage] = useState("");
 
@@ -37,99 +37,18 @@ function NotesWindow() {
     setIsModalOpen(true);
   };
 
-  const createNote = async (notesData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.createNote}`;
-    try {
-      const res = await axios.post(URL, notesData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  const {
-    data: createData,
-    isError: isCreateError,
-    error: createError,
-    isPending: isCreatePending,
-    mutate: createMutate,
-  } = useMutation({
-    mutationFn: createNote,
-    onSuccess: (data) => {
-      setCreateSuccessMessage(data);
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-    onError: (error) => {
-      setCreateErrorMessage(error.message);
-    },
-  });
-
-  const getNotes = async () => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.getNotes}`;
-    try {
-      const res = await axios.get(URL);
-      if (res.data) {
-        return res.data.notes;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
+  const { mutate: createMutate, isPending: isCreatePending } =
+    useCreateNote(notesQuery);
 
   const {
     data: notesData,
+    error: fetchError,
     isError: isFetchingError,
     isPending: isFetchingPending,
-    error: fetchError,
-  } = useQuery({
-    queryKey: notesQuery,
-    queryFn: getNotes,
-  });
+  } = useGetNotes(notesQuery);
 
-  const updateNote = async (noteData) => {
-    const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.notes.updateNote}`;
-    try {
-      const res = await axios.put(URL, noteData);
-      if (res.data.message) {
-        return res.data.message;
-      }
-      if (res.data.error) {
-        return Promise.reject(res.data.error);
-      }
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  const {
-    data: updateData,
-    isError: isUpdateError,
-    error: updateError,
-    isPending: isUpdatePending,
-    mutate: updateMutate,
-  } = useMutation({
-    mutationFn: updateNote,
-    onSuccess: (data) => {
-      setUpdateSuccessMessage(data);
-      setIsModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: notesQuery });
-    },
-    onError: (error) => {
-      setUpdateErrorMessage(error.message);
-    },
-  });
+  const { mutate: updateMutate, isPending: isUpdatePending } =
+    useUpdateNote(notesQuery);
 
   const deleteNote = async (noteId) => {
     const baseUrl = getBaseURl();
@@ -165,43 +84,16 @@ function NotesWindow() {
   });
 
   useEffect(() => {
-    if (createSuccessMessage) {
-      toast.success(createSuccessMessage);
-      setCreateSuccessMessage("");
-    }
-
-    if (updateSuccessMessage) {
-      toast.success(updateSuccessMessage);
-      setUpdateSuccessMessage("");
-    }
-
     if (deleteSuccessMessage) {
       toast.success(deleteSuccessMessage);
       setDeleteSuccessMessage("");
-    }
-
-    if (createErrorMessage) {
-      toast.error(createErrorMessage);
-      setCreateErrorMessage("");
-    }
-
-    if (updateErrorMessage) {
-      toast.error(updateErrorMessage);
-      setUpdateErrorMessage("");
     }
 
     if (deleteErrorMessage) {
       toast.error(deleteErrorMessage);
       setDeleteErrorMessage("");
     }
-  }, [
-    createSuccessMessage,
-    updateSuccessMessage,
-    deleteSuccessMessage,
-    createErrorMessage,
-    updateErrorMessage,
-    deleteErrorMessage,
-  ]);
+  }, [deleteErrorMessage]);
 
   return (
     <AppWindow>
@@ -214,6 +106,7 @@ function NotesWindow() {
           dialogContent={
             <NotesForm
               editNote={editNote}
+              setIsModalOpen={setIsModalOpen}
               isCreatePending={isCreatePending}
               createMutate={createMutate}
               isUpdatePending={isUpdatePending}

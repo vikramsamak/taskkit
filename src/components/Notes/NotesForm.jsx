@@ -14,9 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import Loader from "../SharedComponents/Loader";
+import { useEffect } from "react";
 
 function NotesForm({
   editNote,
+  setIsModalOpen,
   isCreatePending,
   createMutate,
   isUpdatePending,
@@ -50,6 +52,7 @@ function NotesForm({
       createMutate(values);
     }
   }
+
 
   return (
     <Form {...form}>
