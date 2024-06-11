@@ -10,7 +10,6 @@ import {
 import { Button } from "../ui/button";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import Loader from "../SharedComponents/Loader";
 
 function NotesCard({ note, openEditDialog, isDeletePending, deleteMutate }) {
   return (
@@ -30,18 +29,14 @@ function NotesCard({ note, openEditDialog, isDeletePending, deleteMutate }) {
         >
           <MdEdit />
         </Button>
-        {isDeletePending ? (
-          <Loader />
-        ) : (
-          <Button
-            variant="secondary"
-            onClick={() => {
-              deleteMutate(note._id);
-            }}
-          >
-            <MdDelete />
-          </Button>
-        )}
+        <Button
+          variant="secondary"
+          onClick={() => {
+            deleteMutate(note._id);
+          }}
+        >
+          <MdDelete />
+        </Button>
       </CardFooter>
     </Card>
   );
