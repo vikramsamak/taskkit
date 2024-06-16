@@ -64,10 +64,10 @@ export const ROUTES = {
       deleteNote: "/api/notes/deletenote",
     },
     todos: {
-      createTodo: "/api/notes/createtodo",
-      getTodos: "/api/notes/gettodos",
-      updateTodo: "/api/notes/updatetodo",
-      deleteTodo: "/api/notes/deletetodo",
+      createTodo: "/api/todos/createtodo",
+      getTodos: "/api/todos/gettodos",
+      updateTodo: "/api/todos/updatetodo",
+      deleteTodo: "/api/todos/deletetodo",
     },
   },
   page: {

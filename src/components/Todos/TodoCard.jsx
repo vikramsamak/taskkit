@@ -19,6 +19,10 @@ function TodoCard({ todo, openEditDialog, isDeletePending, deleteMutate }) {
       <CardContent>
         <CardDescription>{todo.description}</CardDescription>
       </CardContent>
+      <CardContent className="flex w-full justify-between">
+        <CardDescription>{todo.status}</CardDescription>
+        <CardDescription>{new Date(todo?.dueDate)}</CardDescription>
+      </CardContent>
       <CardFooter className="flex w-full justify-end gap-2">
         <Button
           variant="secondary"

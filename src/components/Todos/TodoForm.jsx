@@ -33,10 +33,12 @@ import {
 function TodoForm({
   editTodo,
   setIsModalOpen,
+  createMutate,
+  updateMutate,
   isCreatePending,
   isUpdatePending,
 }) {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(editTodo ? editTodo.dueDate : null);
   const todosForm = z.object({
     title: z
       .string()
@@ -67,15 +69,17 @@ function TodoForm({
   });
 
   function onSubmit(values) {
-    // if (editTodo) {
-    //   updateMutate({
-    //     ...editTodo,
-    //     title: values.title,
-    //     description: values.description,
-    //   });
-    // } else {
-    //   createMutate(values);
-    // }
+    if (editTodo) {
+      updateMutate({
+        ...editTodo,
+        title: values.title,
+        description: values.description,
+        status: values.status,
+        dueDate: values.dueDate,
+      });
+    } else {
+      createMutate(values);
+    }
   }
 
   return (
