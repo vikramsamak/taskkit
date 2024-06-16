@@ -64,9 +64,6 @@ export const ROUTES = {
       deleteNote: "/api/notes/deletenote",
     },
     todos: "/api/todos",
-    user: {
-      getUser: "/api/users/getUser/",
-    },
   },
   page: {
     protected: {
