@@ -9,7 +9,7 @@ const useDeleteTodo = (queryKey) => {
 
   const deleteTodo = async (todoId) => {
     const baseUrl = getBaseURl();
-    const URL = `${baseUrl}${ROUTES.api.todos.deleteTodo}?noteId=${todoId}`;
+    const URL = `${baseUrl}${ROUTES.api.todos.deleteTodo}?todoId=${todoId}`;
     try {
       const res = await axios.delete(URL);
       if (res.data.message) {
