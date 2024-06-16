@@ -79,11 +79,10 @@ function TodoForm({
         status: values.status,
         dueDate: values.dueDate,
       });
-      setIsModalOpen(false);
     } else {
       createMutate(values);
-      setIsModalOpen(false);
     }
+    setIsModalOpen(false);
   }
 
   return (
