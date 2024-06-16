@@ -90,6 +90,16 @@ export const DEV_ENV = "development";
 
 export const PROD_ENV = "production";
 
-export const TODOS_STATUS = ["Not started", "In Progress", "Completed"];
+export const NOT_STARTED_TODO_STATUS = "Not started";
+
+export const IN_PROGRESS_TODO_STATUS = "In Progress";
+
+export const COMPLETED_TODO_STATUS = "Completed";
+
+export const TODOS_STATUS = [
+  NOT_STARTED_TODO_STATUS,
+  IN_PROGRESS_TODO_STATUS,
+  COMPLETED_TODO_STATUS,
+];
 
 export const TODOS_DEFAULT_STATUS = "Not started";

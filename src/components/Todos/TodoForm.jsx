@@ -16,7 +16,7 @@ import Loader from "../SharedComponents/Loader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { TODOS_DEFAULT_STATUS, TODOS_STATUS } from "@/helpers/Constants";
+import { COMPLETED_TODO_STATUS, TODOS_STATUS } from "@/helpers/Constants";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "../ui/calendar";
@@ -67,6 +67,8 @@ function TodoForm({
       dueDate: editTodo ? editTodo.dueDate : "",
     },
   });
+
+  const status = form.watch("status");
 
   function onSubmit(values) {
     if (editTodo) {
@@ -145,61 +147,63 @@ function TodoForm({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="dueDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Due Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
-                  <Select
-                    onValueChange={(value) => {
-                      setDate(addDays(new Date(), parseInt(value)));
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="0">Today</SelectItem>
-                      <SelectItem value="1">Tomorrow</SelectItem>
-                      <SelectItem value="3">In 3 days</SelectItem>
-                      <SelectItem value="7">In a week</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <div className="rounded-md border">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={(date) => {
-                        setDate(date);
-                        form.setValue("dueDate", date?.toISOString());
+        {status !== COMPLETED_TODO_STATUS && (
+          <FormField
+            control={form.control}
+            name="dueDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Due Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
+                    <Select
+                      onValueChange={(value) => {
+                        setDate(addDays(new Date(), parseInt(value)));
                       }}
-                      disabled={(date) =>
-                        isBefore(startOfDay(date), startOfDay(new Date()))
-                      }
-                      initialFocus
-                    />
-                  </div>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        <SelectItem value="0">Today</SelectItem>
+                        <SelectItem value="1">Tomorrow</SelectItem>
+                        <SelectItem value="3">In 3 days</SelectItem>
+                        <SelectItem value="7">In a week</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <div className="rounded-md border">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={(date) => {
+                          setDate(date);
+                          form.setValue("dueDate", date?.toISOString());
+                        }}
+                        disabled={(date) =>
+                          isBefore(startOfDay(date), startOfDay(new Date()))
+                        }
+                        initialFocus
+                      />
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit">
           {isCreatePending || isUpdatePending ? (
             <Loader />
