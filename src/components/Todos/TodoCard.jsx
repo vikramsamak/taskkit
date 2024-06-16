@@ -9,6 +9,7 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { format, parseISO } from "date-fns";
 
 function TodoCard({ todo, openEditDialog, isDeletePending, deleteMutate }) {
   return (
@@ -21,7 +22,9 @@ function TodoCard({ todo, openEditDialog, isDeletePending, deleteMutate }) {
       </CardContent>
       <CardContent className="flex w-full justify-between">
         <CardDescription>{todo.status}</CardDescription>
-        <CardDescription>{new Date(todo?.dueDate)}</CardDescription>
+        <CardDescription>
+          {format(parseISO(todo.dueDate), "PPP")}
+        </CardDescription>
       </CardContent>
       <CardFooter className="flex w-full justify-end gap-2">
         <Button
