@@ -63,7 +63,12 @@ export const ROUTES = {
       updateNote: "/api/notes/updatenote",
       deleteNote: "/api/notes/deletenote",
     },
-    todos: "/api/todos",
+    todos: {
+      createTodo: "/api/todos/createtodo",
+      getTodos: "/api/todos/gettodos",
+      updateTodo: "/api/todos/updatetodo",
+      deleteTodo: "/api/todos/deletetodo",
+    },
   },
   page: {
     protected: {
@@ -84,3 +89,17 @@ export const DEV_ENV_URL = "http://localhost:3000";
 export const DEV_ENV = "development";
 
 export const PROD_ENV = "production";
+
+export const NOT_STARTED_TODO_STATUS = "Not started";
+
+export const IN_PROGRESS_TODO_STATUS = "In Progress";
+
+export const COMPLETED_TODO_STATUS = "Completed";
+
+export const TODOS_STATUS = [
+  NOT_STARTED_TODO_STATUS,
+  IN_PROGRESS_TODO_STATUS,
+  COMPLETED_TODO_STATUS,
+];
+
+export const TODOS_DEFAULT_STATUS = "Not started";
