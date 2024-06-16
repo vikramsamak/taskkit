@@ -1,8 +1,15 @@
 import { dbConnect } from "@/db/connect";
+import { getUserDetailsFromToken } from "@/helpers/helperFunctions";
 import Todos from "@/models/todosModels";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
+  const user = await getUserDetailsFromToken(req);
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const reqBody = await req.json();
   const { title, description, status, dueDate } = reqBody;
 
@@ -13,6 +20,7 @@ export async function POST(req) {
       description,
       status,
       dueDate,
+      user: user.id,
     });
 
     if (!savedTodo) {
