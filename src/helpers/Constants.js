@@ -63,7 +63,12 @@ export const ROUTES = {
       updateNote: "/api/notes/updatenote",
       deleteNote: "/api/notes/deletenote",
     },
-    todos: "/api/todos",
+    todos: {
+      createTodo: "/api/notes/createtodo",
+      getTodos: "/api/notes/gettodos",
+      updateTodo: "/api/notes/updatetodo",
+      deleteTodo: "/api/notes/deletetodo",
+    },
   },
   page: {
     protected: {
