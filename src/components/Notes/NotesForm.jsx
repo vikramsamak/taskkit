@@ -51,8 +51,8 @@ function NotesForm({
     } else {
       createMutate(values);
     }
+    setIsModalOpen(false);
   }
-
 
   return (
     <Form {...form}>

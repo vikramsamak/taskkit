@@ -3,7 +3,7 @@ import Users from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { TOKEN } from "@/helpers/Constants";
-import { getAvatar, getJWTToken } from "@/helpers/helperFunctions";
+import { getAvatar } from "@/helpers/helperFunctions";
 
 export async function POST(req) {
   try {
