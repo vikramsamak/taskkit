@@ -89,3 +89,7 @@ export const DEV_ENV_URL = "http://localhost:3000";
 export const DEV_ENV = "development";
 
 export const PROD_ENV = "production";
+
+export const TODOS_STATUS = ["Not started", "In Progress", "Completed"];
+
+export const TODOS_DEFAULT_STATUS = "Not started";
